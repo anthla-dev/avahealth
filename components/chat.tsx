@@ -21,7 +21,7 @@ export default function Chat() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } =
     useChat({
       api: '/api/chat',
       onFinish: (message) => {
@@ -49,7 +49,8 @@ export default function Chat() {
     recognition.interimResults = false;
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
-      handleInputChange({ target: { value: transcript } } as any);
+      // Immediately send the voice message as a user message
+      append({ role: 'user', content: transcript });
     };
     recognition.onerror = (event: any) => {
       console.error('Speech error:', event.error);
@@ -217,7 +218,7 @@ export default function Chat() {
           variant="outline"
           size="icon"
           onClick={startListening}
-          disabled={listening}
+          disabled={listening || isLoading}
           className="shrink-0"
           aria-label="Start voice input"
         >
