@@ -65,6 +65,14 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-full">
+      {/* Mini style to make the last paragraph inline so the repeat button sits naturally */}
+      <style>{`
+        .assistant-bubble p:last-child {
+          display: inline;
+          margin-bottom: 0;
+        }
+      `}</style>
+
       {/* Header */}
       <div className="flex items-center gap-2.5 px-4 py-3 border-b border-gray-200 bg-white rounded-t-2xl shrink-0">
         <svg
@@ -111,7 +119,7 @@ export default function Chat() {
                   relative max-w-[80%] rounded-2xl px-4 py-2.5 text-sm text-[#1E293B] leading-relaxed
                   ${isUser
                     ? 'bg-[#E8F5F0] rounded-br-sm'
-                    : 'bg-white border border-gray-200 shadow-sm rounded-bl-sm'}
+                    : 'bg-white border border-gray-200 shadow-sm rounded-bl-sm assistant-bubble'}
                 `}
               >
                 {urgent && (
@@ -123,55 +131,55 @@ export default function Chat() {
                 {isUser ? (
                   <span className="whitespace-pre-wrap">{message.content}</span>
                 ) : (
-                  <ReactMarkdown
-                    components={{
-                      p: ({ children }) => (
-                        <p className="mb-1.5 last:mb-0">{children}</p>
-                      ),
-                      ul: ({ children }) => (
-                        <ul className="list-disc ml-4 mb-1.5 space-y-0.5">{children}</ul>
-                      ),
-                      ol: ({ children }) => (
-                        <ol className="list-decimal ml-4 mb-1.5 space-y-0.5">{children}</ol>
-                      ),
-                      li: ({ children }) => (
-                        <li className="leading-snug">{children}</li>
-                      ),
-                      strong: ({ children }) => (
-                        <strong className="font-semibold text-[#1E293B]">{children}</strong>
-                      ),
-                      em: ({ children }) => (
-                        <em className="italic">{children}</em>
-                      ),
-                    }}
-                  >
-                    {message.content}
-                  </ReactMarkdown>
-                )}
-
-                {/* Repeat button – placed right after the last sentence, no floating */}
-                {!isUser && (
-                  <button
-                    onClick={() => speakMessage(message.content)}
-                    className="ml-2 inline-flex items-center justify-center w-6 h-6 rounded-full border border-gray-200 bg-white text-[#1A6B4A] hover:bg-[#1A6B4A]/10 hover:border-[#1A6B4A]/30 transition-colors"
-                    aria-label="Repeat message"
-                    title="Repeat"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  <>
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => (
+                          <p className="mb-1.5 last:mb-0">{children}</p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="list-disc ml-4 mb-1.5 space-y-0.5">{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="list-decimal ml-4 mb-1.5 space-y-0.5">{children}</ol>
+                        ),
+                        li: ({ children }) => (
+                          <li className="leading-snug">{children}</li>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="font-semibold text-[#1E293B]">{children}</strong>
+                        ),
+                        em: ({ children }) => (
+                          <em className="italic">{children}</em>
+                        ),
+                      }}
                     >
-                      <path d="M1 4v6h6" />
-                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
-                    </svg>
-                  </button>
+                      {message.content}
+                    </ReactMarkdown>
+
+                    {/* Repeat button – now naturally right after the last sentence */}
+                    <button
+                      onClick={() => speakMessage(message.content)}
+                      className="ml-2 inline-flex items-center justify-center w-6 h-6 rounded-full border border-gray-200 bg-white text-[#1A6B4A] hover:bg-[#1A6B4A]/10 hover:border-[#1A6B4A]/30 transition-colors"
+                      aria-label="Repeat message"
+                      title="Repeat"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M1 4v6h6" />
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                      </svg>
+                    </button>
+                  </>
                 )}
               </div>
             </div>
